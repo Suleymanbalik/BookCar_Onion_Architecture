@@ -1,0 +1,34 @@
+﻿using BookCar.Domain.Entities;
+using BookCarOnion.Application.Features.CQRS.Results.BannerResults;
+using BookCarOnion.Application.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BookCarOnion.Application.Features.CQRS.Handlers.BannerHandlers
+{
+    public class GetBannerQueryHandler
+    {
+        private readonly IRepository<Banner> _repository;
+
+        public GetBannerQueryHandler(IRepository<Banner> repository)
+        {
+            _repository = repository;
+        }
+
+        public async Task<List<GetBannerQueryResult>> Handle()
+        {
+            var values =await _repository.GetAllAsync();
+            return values.Select(x => new GetBannerQueryResult
+            {
+                BannerID = x.BannerID,
+                BannerDescription = x.BannerDescription,
+                BannerTitle = x.BannerTitle,
+                BannerVideoDescription = x.BannerVideoDescription,
+                BannerVideoUrl = x.BannerVideoUrl,
+            }).ToList();
+        }
+    }
+}
